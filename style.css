@@ -1,0 +1,23 @@
+/*
+ Theme Name:   Pine Cliff Woodworks
+ Theme URI:    http://www.pinecliffwoodworks.com/
+ Description:  Theme for Pine Cliff Woodworks - based on the Craftsman theme
+ Author:       Brian Herold & Trezy Peebles (by last name, not necessarily prowess)
+ Author URI:   http://google.com?q=Brian%20;Herold%20;and%20;Trezy%20;Peebles
+ Template:     craftsman
+ Version:      1.0.0
+ License:      GNU General Public License v2 or later
+ License URI:  http://www.gnu.org/licenses/gpl-2.0.html
+ Tags:         light, dark, two-columns, right-sidebar, responsive-layout, accessibility-ready
+ Text Domain:  pinecliffwoodworks-child
+*/
+
+
+#wpcf7-f1896-o1 .your-email input,
+#wpcf7-f1896-o2 .your-email input {
+  border-color: #dedede;
+}
+#wpcf7-f1896-o1 .your-email input:focus,
+#wpcf7-f1896-o2 .your-email input:focus {
+  border-color: #bdc3c7;
+}
