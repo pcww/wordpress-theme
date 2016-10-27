@@ -10,6 +10,10 @@ function _mc_getMandrillInstance() {
   return new Mandrill(PCW_MANDRILL_API_KEY);
 }
 
+function _mc_emailSendOrderVerification ( $to_email, $to_name, $order_verification_hash ) {
+
+}
+
 function _mc_emailSendOrderConfirmation ( $to_email, $to_name, $board_id ) {
 
   try {

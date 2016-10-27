@@ -96,3 +96,7 @@ function _api_post_order ( WP_REST_Request $request ) {
 
   // return 'Posting an order.';
 }
+
+function _api_verify_order ( WP_REST_Request $request ) {
+  return "nope...";
+}

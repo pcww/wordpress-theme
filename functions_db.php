@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/functions_mandrill.php';
-
+require_once __DIR__ . '/functions_util.php';
 
 function _db_getBoardData($id) {
   $board_row = $GLOBALS['wpdb']->get_row( "SELECT * FROM pcw_boards WHERE id = $id" );
@@ -41,7 +41,8 @@ function _db_saveOrderData($order_data) {
   $result = $GLOBALS['wpdb']->insert('pcw_orders', array(
     'order_data' => $json_order_data,
     'board_id' => $order_data['board_id'],
-    'date_created' => current_time('mysql')
+    'date_created' => current_time('mysql'),
+    'verify_hash' => GUID()
   ));
   $lastid = $GLOBALS['wpdb']->insert_id;
 

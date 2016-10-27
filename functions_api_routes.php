@@ -41,4 +41,9 @@ add_action('rest_api_init', function () {
     'callback' => '_api_post_order'
   ));
 
+  register_rest_route('board-builder/v1', '/order-verify', array(
+    'methods' => 'POST',
+    'callback' => '_api_verify_order'
+  ));
+
 });
