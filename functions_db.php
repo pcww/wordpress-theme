@@ -30,7 +30,7 @@ function _db_saveBoardData($board_data) {
 }
 
 function _db_getOrderData($id) {
-  $order_row = $GLOBALS['wpdb']->get_row( "SELECT * FROM pcw_orders WHERE id = $id" );
+  $order_row = $GLOBALS['wpdb']->get_row( "SELECT * FROM pcw_orders WHERE id = $id", ARRAY_A);
   if ($order_row) return $order_row;
 
   return false;
@@ -38,14 +38,43 @@ function _db_getOrderData($id) {
 
 function _db_saveOrderData($order_data) {
   $json_order_data = json_encode($order_data);
+  $guid = GUID();
   $result = $GLOBALS['wpdb']->insert('pcw_orders', array(
     'order_data' => $json_order_data,
     'board_id' => $order_data['board_id'],
     'date_created' => current_time('mysql'),
-    'verify_hash' => GUID()
+    'verify_hash' => $guid
   ));
   $lastid = $GLOBALS['wpdb']->insert_id;
 
-  if ($result) return $lastid;
-  else return false;
+  if ($result) {
+    return array(
+      'order_id' => $lastid,
+      'verify_hash' => $guid
+    );
+  }
+  else
+    return false;
+}
+
+function _db_verifyOrder($order_id, $verify_hash) {
+  $result = $GLOBALS['wpdb']->update(
+  	'pcw_orders',
+  	array(
+  		'verified' => true
+  	),
+  	array(
+      'id' => $order_id,
+      'verify_hash' => $verify_hash
+    )
+  );
+
+  if ($result === false) return false;
+
+  // Check if the order was actually verified
+  $order_data = _db_getOrderData($order_id);
+  if (!$order_data['verified']) return false; // hash probably didnt match the order_id's hash
+
+  return $result;
+
 }

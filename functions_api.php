@@ -51,7 +51,7 @@ function _api_get_order ( WP_REST_Request $request ) {
     return new WP_Error( 'no_order_found', "Invalid order requested ({$order_id})", array( 'status' => 404 ) );
   }
 
-  return json_decode($order_data->order_data);
+  return json_decode($order_data['order_data']);
 
   // return 'Getting an order.';
 }
@@ -82,10 +82,13 @@ function _api_post_order ( WP_REST_Request $request ) {
   $name = $order_data['name'];
 
 
-  $new_order_id = _db_saveOrderData($order_data);
+  $results = _db_saveOrderData($order_data);
+  $new_order_id = $results['order_id'];
+  $verify_hash = $results['verify_hash'];
 
   if ($new_order_id) {
-    _mc_emailSendOrderConfirmation($email, $name, $board_id);
+    // _mc_emailSendOrderConfirmation($email, $name, $board_id);
+    _mc_emailSendOrderVerification($email, $name, $new_order_id, $verify_hash);
 
     return array(
       'order_id' => $new_order_id
@@ -98,5 +101,55 @@ function _api_post_order ( WP_REST_Request $request ) {
 }
 
 function _api_verify_order ( WP_REST_Request $request ) {
-  return "nope...";
+  $verify_data = $request->get_json_params();
+
+  if (is_null($verify_data)) {
+    return new WP_Error( 'invalid_order_verification', "Invalid order verification data submitted.", array( 'status' => 400 ) );
+  }
+
+  if (!isset($verify_data['order_id'])) {
+    return new WP_Error( 'invalid_order_verification', "Missing order id in order verification.", array( 'status' => 400 ) );
+  }
+  $order_id = $verify_data['order_id'];
+
+  if (!isset($verify_data['verify_hash'])) {
+    return new WP_Error( 'invalid_order_verification', "Missing verify hash in order verification.", array( 'status' => 400 ) );
+  }
+  $verify_hash = $verify_data['verify_hash'];
+
+  $resend = isset($verify_data['resend']);
+
+  $verifiedResult = _db_verifyOrder($order_id, $verify_hash);
+  $verified = $verifiedResult !== false;
+  $already_sent = $verified && $verifiedResult == 0;
+
+  // return array('verifiedResult' => $verifiedResult, 'verified' => $verified, 'already_sent' => $already_sent, 'resend' => $resend);
+
+  // return _db_verifyOrder($order_id, $verify_hash);
+  if ($verified) {
+    $message = "Order verified. Sending confirmation.";
+    $code = 'verified';
+    $order_data = json_decode(_db_getOrderData($order_id)['order_data']);
+
+    // return $order_data->email;
+    if ($already_sent && !$resend) {
+      $message = "Order already verified.";
+      $code = 'already_verified';
+    }
+    else if ($already_sent && $resend) {
+      $message = "Order already verified. Confirmation resent.";
+      $code = 'already_verified_resent';
+    }
+
+    if (!$already_sent || $resend) _mc_emailSendOrderConfirmation( $order_data->email, $order_data->name, $board_id );
+
+    return array(
+      'verified' => true,
+      'code' => $code,
+      'message' => $message
+    );
+
+  } else {
+    return new WP_Error( 'invalid_order_verification', "Could not verify the provided order.", array( 'status' => 400 ) );
+  }
 }
