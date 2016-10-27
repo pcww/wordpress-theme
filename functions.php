@@ -1,10 +1,4 @@
 <?php
-  // require __DIR__ . '/vendor/autoload.php';
-
-  // require_once __DIR__ . '/functions_util.php';
-
-
-
   require_once __DIR__ . '/functions_api_routes.php';
 
   add_action( 'wp_enqueue_scripts', 'theme_enqueue_styles' );
