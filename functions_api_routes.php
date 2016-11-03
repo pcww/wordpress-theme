@@ -24,7 +24,7 @@ add_action('rest_api_init', function () {
   ));
 
   // Orders
-  register_rest_route('board-builder/v1', '/order/(?P<id>.*)', array(
+  register_rest_route('board-builder/v1', '/order/(?P<id>.+)/(?P<hash>.*)', array(
     'methods' => 'GET',
     'callback' => '_api_get_order',
     'args' => array(

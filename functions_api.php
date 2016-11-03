@@ -87,7 +87,6 @@ function _api_post_order ( WP_REST_Request $request ) {
   $verify_hash = $results['verify_hash'];
 
   if ($new_order_id) {
-    // _mc_emailSendOrderConfirmation($email, $name, $board_id);
     _mc_emailSendOrderVerification($email, $name, $new_order_id, $verify_hash);
 
     return array(
@@ -141,7 +140,12 @@ function _api_verify_order ( WP_REST_Request $request ) {
       $code = 'already_verified_resent';
     }
 
-    if (!$already_sent || $resend) _mc_emailSendOrderConfirmation( $order_data->email, $order_data->name, $board_id );
+    if (!$already_sent || $resend) {
+      // return $order_data;
+      _mc_emailSendOrderConfirmation( $order_data->email, $order_data->name, $order_id, $verify_hash );
+      _mc_emailSendOrderDetails( $order_data->email, $order_data->name, $order_data->phone, $order_id, $verify_hash );
+    }
+
 
     return array(
       'verified' => true,
