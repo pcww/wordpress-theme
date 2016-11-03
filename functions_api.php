@@ -76,17 +76,19 @@ function _api_get_order ( WP_REST_Request $request ) {
 function _api_post_order ( WP_REST_Request $request ) {
   $order_data = $request->get_json_params();
 
-  // TODO: Validate posted data is actually in proper format - JSON Schema?
-
   if (is_null($order_data)) {
     return new WP_Error( 'invalid_order_data', "Invalid order data submitted.", array( 'status' => 400 ) );
   }
-
 
   if (!isset($order_data['board_id'])) {
     return new WP_Error( 'invalid_order_data', "Missing board id in order details.", array( 'status' => 400 ) );
   }
   $board_id = $order_data['board_id'];
+
+  $duplicate_board_order = _db_getOrderDataByBoardId($board_id);
+  if ($duplicate_board_order) {
+    return new WP_Error( 'invalid_order_data', "There is already an order for that board id ({$board_id}).", array( 'status' => 400 ) );
+  }
 
   if (!isset($order_data['email'])) {
     return new WP_Error( 'invalid_order_data', "Missing email address in order details.", array( 'status' => 400 ) );

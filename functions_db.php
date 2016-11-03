@@ -42,6 +42,14 @@ function _db_getOrderData($id, $verify_hash = false) {
   return false;
 }
 
+function _db_getOrderDataByBoardId($board_id) {
+  $order_row = $GLOBALS['wpdb']->get_row( "SELECT * FROM pcw_orders WHERE board_id = $board_id", ARRAY_A);
+
+  if ($order_row) return $order_row;
+
+  return false;
+}
+
 function _db_saveOrderData($order_data) {
   $json_order_data = json_encode($order_data);
   $guid = GUID();
