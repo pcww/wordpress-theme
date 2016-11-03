@@ -21,7 +21,8 @@ function _db_saveBoardData($board_data) {
     'board_data' => $json_board_data,
     'name' => $board_data['name'],
     'date_created' => current_time('mysql'),
-    'template' => $is_template
+    'template' => $is_template,
+    'created_from_id' => $board_data['createdFromId']
   ));
   $lastid = $GLOBALS['wpdb']->insert_id;
 
@@ -29,8 +30,13 @@ function _db_saveBoardData($board_data) {
   else return false;
 }
 
-function _db_getOrderData($id) {
-  $order_row = $GLOBALS['wpdb']->get_row( "SELECT * FROM pcw_orders WHERE id = $id", ARRAY_A);
+function _db_getOrderData($id, $verify_hash = false) {
+  if ($verify_hash) {
+    $order_row = $GLOBALS['wpdb']->get_row( "SELECT * FROM pcw_orders WHERE id = $id AND verify_hash = '$verify_hash'", ARRAY_A);
+  } else {
+    $order_row = $GLOBALS['wpdb']->get_row( "SELECT * FROM pcw_orders WHERE id = $id", ARRAY_A);
+  }
+
   if ($order_row) return $order_row;
 
   return false;

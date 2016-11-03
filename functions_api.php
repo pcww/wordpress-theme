@@ -30,6 +30,10 @@ function _api_post_board ( WP_REST_Request $request ) {
     return new WP_Error( 'invalid_board_data', "Invalid board data submitted.", array( 'status' => 400 ) );
   }
 
+  if (!isset($order_data['createdFromId'])) {
+    return new WP_Error( 'invalid_board_data', "Missing created from board id in board details.", array( 'status' => 400 ) );
+  }
+
   $new_board_id = _db_saveBoardData($board_data);
 
   if ($new_board_id) {
@@ -45,13 +49,26 @@ function _api_post_board ( WP_REST_Request $request ) {
 
 function _api_get_order ( WP_REST_Request $request ) {
   $order_id = $request->get_param( 'id' );
-  $order_data = _db_getOrderData($order_id);
+  $verify_hash = $request->get_param( 'hash' );
+  // return array(
+  //   'order' => $order_id,
+  //   'hash' => $verify_hash
+  // );
+  $order_data = _db_getOrderData($order_id, $verify_hash);
+
+  // return $order_data;
 
   if (!$order_data) {
     return new WP_Error( 'no_order_found', "Invalid order requested ({$order_id})", array( 'status' => 404 ) );
   }
 
-  return json_decode($order_data['order_data']);
+  $return_order_data = json_decode($order_data['order_data']);
+
+  // Make sure we include the board_id and verified state
+  $return_order_data->board_id = $order_data['board_id'];
+  $return_order_data->verified = (bool)$order_data['verified'];
+
+  return $return_order_data;
 
   // return 'Getting an order.';
 }

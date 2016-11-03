@@ -32,6 +32,11 @@ add_action('rest_api_init', function () {
         'validate_callback' => function($param, $request, $key) {
           return is_numeric( $param );
         }
+      ),
+      'hash' => array(
+        'validate_callback' => function($param, $request, $key) {
+          return !empty( $param );
+        }
       )
     )
   ));
