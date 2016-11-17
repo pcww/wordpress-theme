@@ -3,6 +3,13 @@
 require_once __DIR__ . '/functions_mandrill.php';
 require_once __DIR__ . '/functions_util.php';
 
+function _db_getBoardTemplates() {
+  $board_rows = $GLOBALS['wpdb']->get_results( "SELECT * FROM pcw_boards WHERE template = 1" );
+  if ($board_rows) return $board_rows; 
+
+  return false;
+}
+
 function _db_getBoardData($id) {
   $board_row = $GLOBALS['wpdb']->get_row( "SELECT * FROM pcw_boards WHERE id = $id" );
   if ($board_row) return $board_row;
