@@ -4,8 +4,8 @@ require_once __DIR__ . '/functions_mandrill.php';
 require_once __DIR__ . '/functions_util.php';
 
 function _db_getBoardTemplates() {
-  $board_rows = $GLOBALS['wpdb']->get_results( "SELECT * FROM pcw_boards WHERE template = 1" );
-  if ($board_rows) return $board_rows; 
+  $board_rows = $GLOBALS['wpdb']->get_results( "SELECT * FROM pcw_boards WHERE template = 1 ORDER BY name" );
+  if ($board_rows) return $board_rows;
 
   return false;
 }

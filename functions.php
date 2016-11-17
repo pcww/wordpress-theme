@@ -16,3 +16,45 @@
     return '/shop-coming-soon/';
   }
   add_filter( 'woocommerce_return_to_shop_redirect', 'wc_empty_cart_redirect_url' );
+
+  // Board Template Shortcode
+
+  function pcw_board_templates_shortcode( $atts, $content = null ) {
+    ob_start();
+    ?>
+    <div id="pcw-boards" class="">
+      <?php
+        $board_templates = _db_getBoardTemplates();
+        foreach ( $board_templates as $board )
+        {
+          ?>
+          <div class="board">
+            <div class="logo">
+              <img src="<?= $board->logo_url ?>" onerror="this.onerror=null; this.src='<?= $board->logo_url ?>'">
+              <span><?= $board->name ?></span>
+            </div>
+            <div class="photo">
+              <img src="<?= $board->photo_url ?>"/>
+
+              <div class="mnky_button flat-teal build-button">
+                <a style="background-color:#7f8c8d; color:#ffffff;" href="http://builder.pinecliffwoodworks.com/#?id=<?= $board->id ?>" title="Build this board">
+                  <span>Build this board <i class="fa fa-cog" aria-hidden="true"></i></span>
+                </a>
+              </div>
+
+              <div class="mnky_button flat-pcw-green buy-button">
+                <a style="background-color:#7f8c8d; color:#ffffff;" href="http://builder.pinecliffwoodworks.com/#?id=<?= $board->id ?>" title="Buy this board">
+                  <span>Buy this board <i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                </a>
+              </div>
+
+            </div>
+          </div>
+          <?php
+        }
+      ?>
+    </div>
+    <?php
+    return ob_get_clean();
+  }
+  add_shortcode( 'pcw_board_templates', 'pcw_board_templates_shortcode' );

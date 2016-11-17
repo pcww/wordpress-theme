@@ -16,7 +16,6 @@
               ?>
             	<div class="board">
                 <div class="logo">
-                  <img src="#" />
                   <img src="<?= $board->logo_url ?>" onerror="this.onerror=null; this.src='<?= $board->logo_url ?>'">
                   <span><?= $board->name ?></span>
                 </div>
