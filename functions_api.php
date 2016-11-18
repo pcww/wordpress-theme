@@ -30,7 +30,7 @@ function _api_post_board ( WP_REST_Request $request ) {
     return new WP_Error( 'invalid_board_data', "Invalid board data submitted.", array( 'status' => 400 ) );
   }
 
-  if (!isset($order_data['createdFromId'])) {
+  if (!isset($board_data['createdFromId'])) {
     return new WP_Error( 'invalid_board_data', "Missing created from board id in board details.", array( 'status' => 400 ) );
   }
 

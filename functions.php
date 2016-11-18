@@ -58,3 +58,13 @@
     return ob_get_clean();
   }
   add_shortcode( 'pcw_board_templates', 'pcw_board_templates_shortcode' );
+
+
+  // Required - Chrome was reporting invald "Content-Type" in preflight response (OPTIONS CORS check) - this just forces it to true
+  // TODO: Make sure this is secure!!!
+  add_filter('rest_post_dispatch', function (\WP_REST_Response $result) {
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+      $result->header('Access-Control-Allow-Headers', 'Authorization, Content-Type', true);
+    }
+    return $result;
+  });
