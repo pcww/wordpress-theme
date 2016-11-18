@@ -9,12 +9,34 @@
 function _api_get_board ( WP_REST_Request $request ) {
   $board_id = $request->get_param( 'id' );
   $board_data = _db_getBoardData($board_id);
+  $parent_board = false;
 
   if (!$board_data) {
     return new WP_Error( 'no_board_found', "Invalid board requested ({$board_id})", array( 'status' => 404 ) );
   }
 
-  return json_decode($board_data->board_data);
+  $processed_board_data = json_decode($board_data->board_data);
+
+  if (!$board_data->template) {
+      $parent_board = $board_data = _db_getBoardData($board_data->created_from_id);
+  }
+
+  if (!$processed_board_data->photo_url) {
+    if ($board_data->photo_url){
+      $processed_board_data->photo_url = $board_data->photo_url;
+    } elseif ($parent_board) {
+      $processed_board_data->photo_url = $parent_board->photo_url;
+    }
+  }
+  if (!$processed_board_data->logo_url) {
+    if ($board_data->logo_url){
+      $processed_board_data->logo_url = $board_data->logo_url;
+    } elseif ($parent_board) {
+      $processed_board_data->logo_url = $parent_board->logo_url;
+    }
+  }
+
+  return $processed_board_data;
 
   // return 'Getting a board.';
   // return _getDummyBoardData();
@@ -64,8 +86,9 @@ function _api_get_order ( WP_REST_Request $request ) {
 
   $return_order_data = json_decode($order_data['order_data']);
 
-  // Make sure we include the board_id and verified state
+  // Make sure we include the board_id, order_id and verified state
   $return_order_data->board_id = $order_data['board_id'];
+  $return_order_data->order_id = $order_data['id'];
   $return_order_data->verified = (bool)$order_data['verified'];
 
   return $return_order_data;

@@ -12,15 +12,36 @@ function _db_getBoardTemplates() {
 
 function _db_getBoardData($id) {
   $board_row = $GLOBALS['wpdb']->get_row( "SELECT * FROM pcw_boards WHERE id = $id" );
-  if ($board_row) return $board_row;
+  if ($board_row) {
+    return $board_row;
+  }
 
   return false;
 }
 
 function _db_saveBoardData($board_data) {
   $is_template = false;
+  $logo_url = null;
+  $photo_url = null;
+  $parent_board_data = false;
+
   if (isset($board_data['template'])) {
     $is_template = ($board_data['template'] == 'true' ? true: false);
+  } else {
+    // Get the Parent board's data since we're not saving a new template board
+    $parent_board_data = _db_getBoardData($board_data['createdFromId']);
+  }
+
+  // Split out Logo/Photo
+  if ($board_data['photo_url']) {
+    $photo_url = $board_data['photo_url'];
+  } elseif ($parent_board_data) {
+    $photo_url = $board_data['photo_url'] = $parent_board_data->photo_url;
+  }
+  if ($board_data['logo_url']) {
+    $logo_url = $board_data['logo_url'];
+  } elseif ($parent_board_data) {
+    $logo_url = $board_data['logo_url'] = $parent_board_data->logo_url;
   }
 
   $json_board_data = json_encode($board_data);
@@ -29,7 +50,9 @@ function _db_saveBoardData($board_data) {
     'name' => $board_data['name'],
     'date_created' => current_time('mysql'),
     'template' => $is_template,
-    'created_from_id' => $board_data['createdFromId']
+    'created_from_id' => $board_data['createdFromId'],
+    'logo_url' => $logo_url,
+    'photo_url' => $photo_url
   ));
   $lastid = $GLOBALS['wpdb']->insert_id;
 
