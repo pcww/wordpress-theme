@@ -41,13 +41,6 @@
                   <span>Build this board <i class="fa fa-cog" aria-hidden="true"></i></span>
                 </a>
               </div>
-
-              <div class="mnky_button flat-pcw-green buy-button">
-                <a style="background-color:#7f8c8d; color:#ffffff;" href="http://builder.pinecliffwoodworks.com/#?id=<?= $board->id ?>" title="Buy this board">
-                  <span>Buy this board <i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
-                </a>
-              </div>
-
             </div>
           </div>
           <?php
