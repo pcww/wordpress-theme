@@ -25,6 +25,12 @@
     <div id="pcw-boards" class="">
       <?php
         $board_templates = _db_getBoardTemplates();
+
+        // Sort boards by complexity
+        usort($board_templates, function ($a, $b) {
+          return ($a->template > $b->template) ? 1 : -1;
+        });
+
         foreach ( $board_templates as $board )
         {
           ?>
