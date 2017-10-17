@@ -199,3 +199,31 @@ function _api_verify_order ( WP_REST_Request $request ) {
     return new WP_Error( 'invalid_order_verification', "Could not verify the provided order.", array( 'status' => 400 ) );
   }
 }
+
+function ReadFolderDirectory($dir,$listDir= array())
+{
+    $listDir = array();
+    if($handler = opendir($dir))
+    {
+        while (($sub = readdir($handler)) !== FALSE)
+        {
+            if ($sub != "." && $sub != ".." && $sub != "Thumb.db")
+            {
+                if(is_file($dir."/".$sub))
+                {
+                    $listDir[] = $sub;
+                }elseif(is_dir($dir."/".$sub))
+                {
+                    $listDir[$sub] = ReadFolderDirectory($dir."/".$sub);
+                }
+            }
+        }
+        closedir($handler);
+    }
+    return $listDir;
+}
+
+function _api_get_designs ( WP_REST_Request $request ) {
+  $designs_location = '/home/ds4pdjoaqiq6/public_html/builder.pinecliffwoodworks.com/current/assets/endcap-designs';
+  return ReadFolderDirectory($designs_location);
+}

@@ -77,13 +77,7 @@
   position: relative;
   display: block;
   top: 0.7rem;
-  opacity: 0.5;
   left: -2rem;
-  transition: opacity .5s ease-in-out;
-}
-
-#pcw-boards .board:hover .logo img {
-  opacity: .8;
 }
 
 #pcw-boards .board .logo span {
@@ -137,3 +131,39 @@
 }
 
 .mnky_button.flat-pcw-green a:hover{background:#62bd91 !important;}
+
+.no-sidebar.with-top-margin {
+  margin: 70px auto !important;
+}
+
+
+/* 
+  Jackbox Light Customizations 
+*/
+/* Hack to get Jackbox Lightboxes to work with Essential Grid */
+a.esgbox.jackbox {
+  display: block !important;
+}
+
+/* Hide gallery caption metadata initially - will be picked up by jackbox */
+/* Note: this was also pasted in the Essential Grid skin editor 'Global CSS' to hide captions in the grid admin area */
+.eg-pcw-gallery-wcaption-element-25 {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Jackbox is picking up duplicate images, so lets hide all the controls. */
+.jackbox-controls {
+  display: none;
+}
+
+/* Also the image titles are gross numeric camera image names - lets hide these too */
+.jackbox-title-text {
+  display: none;
+}
+
+/* Move captions to the bottom of the lightbox image */
+.jackbox-info-text {
+  bottom: 0 !important;
+  top: unset !important;
+}
