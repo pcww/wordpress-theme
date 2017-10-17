@@ -43,7 +43,7 @@
               <img src="<?= $board->photo_url ?>"/>
 
               <div class="mnky_button flat-teal build-button">
-                <a style="background-color:#7f8c8d; color:#ffffff;" href="http://builder.pinecliffwoodworks.com/#?id=<?= $board->id ?>" title="Build this board">
+                <a style="background-color:#7f8c8d; color:#ffffff;" href="http://builder.pinecliffwoodworks.com/?id=<?= $board->id ?>" title="Build this board">
                   <span>Build this board <i class="fa fa-cog" aria-hidden="true"></i></span>
                 </a>
               </div>

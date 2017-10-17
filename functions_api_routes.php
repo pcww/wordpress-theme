@@ -51,4 +51,10 @@ add_action('rest_api_init', function () {
     'callback' => '_api_verify_order'
   ));
 
+  // Boards
+  register_rest_route('board-builder/v1', '/designs', array(
+    'methods' => 'GET',
+    'callback' => '_api_get_designs'
+  ));
+
 });
