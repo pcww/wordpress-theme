@@ -29,7 +29,13 @@
 
 
 #pcw-boards {
+  margin-top: 1.5rem;
   padding-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  grid-gap: 1rem;
+  align-content: center;
+  align-items: center;
 }
 
 #page-template-page-board-shop .page-header {
@@ -42,10 +48,8 @@
   height: 15.2rem;
   border-radius: 0.8rem;
   position: relative;
-  float: left;
-  margin-right: 0.6rem;
-  margin-bottom: 2.1rem;
-  /*animation: pop-in 0.5s;*/
+  margin: 0 auto !important;
+  /* animation: pop-in 0.5s; */
 }
 
 #pcw-boards .board .logo {
@@ -117,7 +121,7 @@
 }
 
 #pcw-boards .board .photo .build-button {
-  top: 8rem;
+  top: 6rem;
   left: 3rem;
 }
 
@@ -167,3 +171,56 @@ a.esgbox.jackbox {
   bottom: 0 !important;
   top: unset !important;
 }
+
+/* Mobile Display */
+@media only screen and (max-width: 1024px) {
+  #pcw-boards {
+    grid-template-columns: 100%;
+  }
+  #pcw-boards .board {
+    width: 34rem;
+  }
+  #pcw-boards .board .logo img,
+  #pcw-boards .board .logo span {
+    left: 0rem;
+  }
+}
+
+
+@media only screen and (max-width: 750px) {
+  #pcw-boards .board {
+    width: auto;
+    background-color: #efefef;
+    height: auto;
+    border-radius: 0.8rem;
+    position: relative;
+    margin: 0 auto !important;
+  }
+  #pcw-boards .board .logo {
+    width: 100%;
+    display: inline-block;
+    height: 100%;
+  }
+  #pcw-boards .board .logo img {
+    position: static;
+  }
+  #pcw-boards .board .logo span {
+    bottom: 1rem;
+  }
+  #pcw-boards .board .photo {
+    position: relative;
+    width: 100%;
+    text-align: center;
+  }
+  #pcw-boards .board .photo .build-button, 
+  #pcw-boards .board .photo .buy-button {
+    position: absolute;
+    z-index: 999;
+    top: 6rem;
+    left: 50%;
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+}
+
+
