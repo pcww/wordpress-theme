@@ -105,7 +105,8 @@ function _db_verifyOrder($order_id, $verify_hash) {
   $result = $GLOBALS['wpdb']->update(
   	'pcw_orders',
   	array(
-  		'verified' => true
+      'verified' => true,
+      'date_verified' => current_time('mysql')
   	),
   	array(
       'id' => $order_id,
